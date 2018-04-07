@@ -2,10 +2,13 @@
 """ 
 create by 'poet' on 2018/4/5 14:59 
 """
-__author__ = 'poet'
+import json
 
+from yushu_book import YuShuBook
 from flask import Flask
 from helper import is_isbn_or_key
+__author__ = 'poet'
+
 
 # from config import DEBUG
 app = Flask(__name__)
@@ -20,10 +23,18 @@ def srearch(q, page):
     """
     # isbn13 13个0 到9 的数字组合
     #  isbn10 10个 0到 9 的数字组合 含有一些 '-'
+    # pycharm类中  导入的快捷Enter
     isbn_or_key = is_isbn_or_key(q)
+    if isbn_or_key == 'isbn':
+        result = YuShuBook.search_by_isbn(q)
+    else:
+        result = YuShuBook.search_by_keyword(q)
+        # dict 序列化
+    return json.dumps(result) , 200, {'content-type':'application/json'}
+
 
 
 if __name__ == '__main__':  # 入口文件确保 if 里面的 文件 只在 入口文件中执行
     # if __name__  ....  的 具体作用
     # 生产环境 nginx+ uwsgi
-    app.run(host='0.0.0.0', debug=app.config['DEBUG'])
+    app.run(debug=app.config['DEBUG'])
