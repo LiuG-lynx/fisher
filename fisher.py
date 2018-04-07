@@ -5,7 +5,7 @@ create by 'poet' on 2018/4/5 14:59
 import json
 
 from yushu_book import YuShuBook
-from flask import Flask
+from flask import Flask, jsonify
 from helper import is_isbn_or_key
 __author__ = 'poet'
 
@@ -30,7 +30,9 @@ def srearch(q, page):
     else:
         result = YuShuBook.search_by_keyword(q)
         # dict 序列化
-    return json.dumps(result) , 200, {'content-type':'application/json'}
+    return jsonify(result)  # flask 的处理方式
+    # python 的 json
+    # return json.dumps(result) , 200, {'content-type':'application/json'}
 
 
 
